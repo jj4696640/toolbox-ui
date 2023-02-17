@@ -855,6 +855,7 @@ function Register() {
 
   const closeAlert = () => {
     setError(false);
+    setMessage("");
   };
 
   // check if passwords match

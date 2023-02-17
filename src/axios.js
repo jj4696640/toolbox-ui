@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "http://qa-api.toolbox.co.ug/api",
+    baseURL: "http://localhost:8000/api",
 });
 
 instance.interceptors.request.use(

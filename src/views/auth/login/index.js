@@ -1,7 +1,49 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import instance from "../../../axios";
 
 function Login() {
+  const navigate = useNavigate();
+
+  // form data
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  // error handling
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
+
+  // close alert
+  const closeAlert = () => {
+    setError(false);
+    setMessage("");
+  };
+
+  // handle form submit
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    instance
+      .post("/users/login", { email, password })
+      .then(({data}) => {
+        if (data.status) {
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("user", JSON.stringify(data.user));
+          if (data.user.status === "active") {
+            navigate("/");
+          } else {
+            navigate("/new-user");
+          }          
+        } else {
+          setError(true);
+          setMessage(data.message);
+        }
+      })
+      .catch((err) => {
+        setError(true);
+        setMessage("Something went wrong. Please try again later.");
+      });
+  };
+
   return (
     <div
       className="shadow-lg p-3 mb-5 bg-body rounded align-self-center"
@@ -9,7 +51,24 @@ function Login() {
     >
       <p className="h3 text-center fw-bold">Sign In</p>
       <p className="small text-center">Sign in with your email and password.</p>
-      <form>
+      {/* Start: Alert for errors */}
+      {error && (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          <strong>Error: </strong> {message}
+          <button
+            type="button"
+            className="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Close"
+            onClick={closeAlert}
+          ></button>
+        </div>
+      )}
+      {/* End: Alert for errors */}
+      <form onSubmit={handleSubmit}>
         <div className="row mb-3">
           <div className="col">
             {" "}
@@ -23,6 +82,8 @@ function Login() {
               aria-describedby="emailHelp"
               required
               placeholder="john.doe@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
         </div>
@@ -38,6 +99,9 @@ function Login() {
               id="password"
               aria-describedby="passwordHelp"
               required
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
         </div>
