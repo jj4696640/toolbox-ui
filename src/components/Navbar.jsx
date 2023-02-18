@@ -2,10 +2,8 @@ import React, {useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import instance from '../axios';
 
-const user = JSON.parse(localStorage.getItem('user'));
-
 function Navbar() {
-    const [data, setData] = useState(user);
+    const [data, setData] = useState(JSON.parse(localStorage.getItem('user')));
     const navigate = useNavigate()
 
     // Logout

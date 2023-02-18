@@ -28,7 +28,7 @@ function Layout() {
       {authenticated() && approved() ? (
         <>
           <Navbar />
-          <div style={{height: "100vh"}} className="d-flex">
+          <div style={{minHeight: "100vh"}} className="d-flex">
             <Sidebar />
             <div className="w-75 m-5">
               <Outlet />

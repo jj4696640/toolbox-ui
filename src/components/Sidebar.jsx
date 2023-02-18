@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Sidebar() {
   return (
-    <div className="h-100 p-2 border-end" style={{width: "200px"}}>
+    <div className="p-2 border-end" style={{width: "200px"}}>
       <p className="h3 text-center fw-bold border-bottom">
         <Link className="nav-link" to="/">
           Dashboard
