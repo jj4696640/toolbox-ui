@@ -870,23 +870,6 @@ function Register() {
     return passwordRegex.test(password);
   };
 
-  // Reset the form
-  const resetForm = () => {
-    setFirstName("");
-    setSurname("");
-    setOtherName("");
-    setEmail("");
-    setTelephone("");
-    setForceNumber("");
-    setRegion("");
-    setStation("");
-    setRank("");
-    setDirectorate("");
-    setOfficeRole("");
-    setPassword("");
-    setConfirmPassword("");
-  };
-
   // submit form
   const handleSubmit = (e) => {
     e.preventDefault();

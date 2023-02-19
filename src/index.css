@@ -3,3 +3,7 @@
 * {
   font-family: 'Open Sans', sans-serif;
 }
+
+.dropdown-toggle::after {
+  display: none !important;
+}

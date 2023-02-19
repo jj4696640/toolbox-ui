@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import instance from "../../../axios";
 
 const gender = [
   {
@@ -1082,7 +1083,8 @@ function CreateNew() {
     });
   };
 
-  const handleAddParent = () => {
+  const handleAddParent = (event) => {
+    event.preventDefault();
     setParents((prevState) => {
       const parents = [...prevState];
       parents.push({
@@ -1238,19 +1240,19 @@ function CreateNew() {
     reader.onloadend = () => {
       switch (e.target.id) {
         case "formFileFront":
-          setFrontImage(file);
+          setFrontImage(reader.result);
           setFront(`url(${reader.result})`);
           break;
         case "formFileLeft":
-          setLeftImage(file);
+          setLeftImage(reader.result);
           setLeft(`url(${reader.result})`);
           break;
         case "formFileRight":
-          setRightImage(file);
+          setRightImage(reader.result);
           setRight(`url(${reader.result})`);
           break;
         case "formFileHind":
-          setHindImage(file);
+          setHindImage(reader.result);
           setHind(`url(${reader.result})`);
           break;
         default:
@@ -1259,6 +1261,58 @@ function CreateNew() {
     };
     reader.readAsDataURL(file);
   };
+
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const data = {
+      case_ref: caseRef,
+      station,
+      offence,
+      briefs_on_case: briefsOnCase,
+      name,
+      sex,
+      age,
+      nationality,
+      nin,
+      other_id_no: otherIDNo,
+      tribe,
+      religion,
+      marital_status: maritalStatus,
+      place_of_birth: placeOfBirth,
+      present_address: placeOfResidence,
+      distinguishing_features: distinguishingFeatures,
+      height,
+      bodybuild: bodyBuild,
+      eye_color: eyeColor,
+      hair_color: hairColor,
+      level_of_education: levelOfEducation,
+      languages_spoken: language,
+      travel_history: travelHistory,
+      previous_crime_records: criminalHistory,
+      occupation,
+      telephone_numbers: telephone,
+      associates,
+      parents,
+      spouses,
+      left: leftImage,
+      right: rightImage,
+      front: frontImage,
+      hind: hindImage,
+    };
+
+    instance
+      .post("/suspects", data)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div className="border-bottom mb-5 d-flex justify-content-between align-items-end">
@@ -1272,7 +1326,7 @@ function CreateNew() {
           </p>
         </div>
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         {step1 && (
           <div className="row">
             <h2 className="h4">Step 1: Suspect Bio Information</h2>
@@ -1294,6 +1348,7 @@ function CreateNew() {
                   id="formFileFront"
                   type="file"
                   onChange={handleImageUpload}
+                  required
                 />
               </div>
             </div>
@@ -1315,6 +1370,7 @@ function CreateNew() {
                   id="formFileLeft"
                   type="file"
                   onChange={handleImageUpload}
+                  required
                 />
               </div>
             </div>
@@ -1336,6 +1392,7 @@ function CreateNew() {
                   id="formFileRight"
                   type="file"
                   onChange={handleImageUpload}
+                  required
                 />
               </div>
             </div>
@@ -1357,6 +1414,7 @@ function CreateNew() {
                   id="formFileHind"
                   type="file"
                   onChange={handleImageUpload}
+                  required
                 />
               </div>
             </div>
@@ -1494,8 +1552,6 @@ function CreateNew() {
               <label
                 htmlFor="presentResidence"
                 className="form-label"
-                value={placeOfResidence}
-                onChange={(e) => setPlaceOfResidence(e.target.value)}
               >
                 Present Residence
               </label>
@@ -1503,6 +1559,8 @@ function CreateNew() {
                 type="text"
                 className="form-control"
                 id="presentResidence"
+                value={placeOfResidence}
+                onChange={(e) => setPlaceOfResidence(e.target.value)}
               />
             </div>
             <div className="col-12">
@@ -1651,12 +1709,12 @@ function CreateNew() {
                 <label
                   htmlFor="height"
                   className="form-label"
-                  value={levelOfEducation}
-                  onChange={(e) => setLevelOfEducation(e.target.value)}
                 >
                   Level of Education
                 </label>
-                <select className="form-select" aria-label="">
+                <select className="form-select" aria-label="" 
+                  value={levelOfEducation}
+                  onChange={(e) => setLevelOfEducation(e.target.value)}>
                   <option defaultValue>Level of Education</option>
                   {educationLevels.map((level) => (
                     <option key={level.id} value={level.value}>
@@ -1705,7 +1763,10 @@ function CreateNew() {
                 <label htmlFor="bodybuild" className="form-label">
                   Occupation
                 </label>
-                <input type="text" className="form-control" id="bodybuild" />
+                <input type="text" className="form-control" id="bodybuild" 
+                value={occupation}
+                onChange={(e) => setOccupation(e.target.value)}
+                />
               </div>
             </div>
             <div className="col-12 d-flex justify-content-end my-4">
@@ -1734,12 +1795,12 @@ function CreateNew() {
             <div className="d-flex justify-content-between align-items-end">
               <div className="h5">Parent(s)</div>
               <div>
-                <a
+                <button
                   className="btn btn-secondary btn-sm"
                   onClick={handleAddParent}
                 >
                   <i className="bi bi-plus"></i> Add Parent
-                </a>
+                </button>
               </div>
             </div>
             {parents.map((parent, index) => (
@@ -1747,12 +1808,15 @@ function CreateNew() {
                 {index > 0 && (
                   <div className="col-12 mt-2">
                     <div className="d-flex justify-content-end align-items-end">
-                      <a
+                      <button
                         className="btn btn-secondary btn-sm"
-                        onClick={() => handleRemoveParent(index)}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleRemoveParent(index);
+                        }}
                       >
                         &times;
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -1817,12 +1881,15 @@ function CreateNew() {
             <div className="d-flex justify-content-between align-items-end">
               <div className="h5">Spouse(s)</div>
               <div>
-                <a
+                <button
                   className="btn btn-secondary btn-sm"
-                  onClick={handleAddSpouse}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleAddSpouse();
+                  }}
                 >
                   <i className="bi bi-plus"></i> Add Spouse
-                </a>
+                </button>
               </div>
             </div>
             {spouses.map((spouse, index) => (
@@ -1830,12 +1897,15 @@ function CreateNew() {
                 {index > 0 && (
                   <div className="col-12 mt-2">
                     <div className="d-flex justify-content-end align-items-end">
-                      <a
+                      <button
                         className="btn btn-secondary btn-sm"
-                        onClick={() => handleRemoveSpouse(index)}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleRemoveSpouse(index);
+                        }}
                       >
                         &times;
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -1880,7 +1950,7 @@ function CreateNew() {
                     className="form-control"
                     id="residence"
                     value={spouse.residence}
-                    onChange={(event) => handleSpouseNameChange(event, index)}
+                    onChange={(event) => handleSpouseResidenceChange(event, index)}
                   />
                 </div>
                 <div className="col-3">
@@ -1902,12 +1972,15 @@ function CreateNew() {
             <div className="d-flex justify-content-between align-items-end">
               <div className="h5">Associate(s)</div>
               <div>
-                <a
+                <button
                   className="btn btn-secondary btn-sm"
-                  onClick={handleAddAssociate}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    handleAddAssociate();
+                  }}
                 >
                   <i className="bi bi-plus"></i> Add Associate
-                </a>
+                </button>
               </div>
             </div>
             {associates.map((associate, index) => (
@@ -1915,12 +1988,15 @@ function CreateNew() {
                 {index > 0 && (
                   <div className="col-12 mt-2">
                     <div className="d-flex justify-content-end align-items-end">
-                      <a
+                      <button
                         className="btn btn-secondary btn-sm"
-                        onClick={() => handleRemoveAssociate(index)}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleRemoveAssociate(index);
+                        }}
                       >
                         &times;
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}

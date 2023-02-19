@@ -15,11 +15,14 @@ const authenticated = () => {
 
 const approved = () => {
   const approved = JSON.parse(localStorage.getItem("user"));
-  if (approved.status === "active") {
-    return true;
-  } else {
-    return false;
+  if (approved) {
+    if (approved.status === "active") {
+      return true;
+    } else {
+      return false;
+    }
   }
+  return false;
 };
 
 function Layout() {
@@ -28,7 +31,7 @@ function Layout() {
       {authenticated() && approved() ? (
         <>
           <Navbar />
-          <div style={{minHeight: "100vh"}} className="d-flex">
+          <div style={{ minHeight: "100vh" }} className="d-flex">
             <Sidebar />
             <div className="w-75 m-5">
               <Outlet />
@@ -37,9 +40,9 @@ function Layout() {
           <Footer />
         </>
       ) : !approved() ? (
-        <Navigate to="/new-user" />
-      ) : (
         <Navigate to="/login" />
+      ) : (
+        <Navigate to="/new-user" />
       )}
     </>
   );

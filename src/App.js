@@ -8,7 +8,7 @@ import NewPassword from "./views/auth/reset/new-password";
 import PasswordResetReview from "./views/auth/reset/reset-review";
 import Dashboard from "./views/dashboard";
 import CreateNew from "./views/suspects/new";
-import Suspects from "./views/suspects/view";
+import Suspects from "./views/suspects/index";
 import NewUser from "./views/users/new-user";
 import Users from "./views/users/view";
 
