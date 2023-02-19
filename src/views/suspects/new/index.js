@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import instance from "../../../axios";
 
 const gender = [
@@ -935,6 +936,7 @@ const spouseRelationships = [
 ];
 
 function CreateNew() {
+  const navigate = useNavigate();
   const [step1, setStep1] = useState(true);
   const [step2, setStep2] = useState(false);
   const [step3, setStep3] = useState(false);
@@ -1306,7 +1308,7 @@ function CreateNew() {
     instance
       .post("/suspects", data)
       .then((res) => {
-        console.log(res.data);
+        navigate("/suspects");
       })
       .catch((err) => {
         console.log(err);
