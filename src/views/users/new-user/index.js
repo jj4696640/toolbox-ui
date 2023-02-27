@@ -5,7 +5,7 @@ function NewUser() {
   return (
     <div
       className="shadow-lg p-3 mb-5 bg-body rounded align-self-center"
-      style={{ width: "35%" }}
+      id="new_user__container"
     >
       <p className="h3 text-center fw-bold">User Pending Approval</p>
       <p className="">

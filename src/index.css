@@ -7,3 +7,49 @@
 .dropdown-toggle::after {
   display: none !important;
 }
+
+
+@media (max-width: 1024px) {
+  #login__container {
+      width: "100%";
+  }
+
+  #register_container {
+    width: "100%";
+  }
+
+  #new_user__container {
+    width: "80%";
+  }
+}
+
+/* Default Medium Sized Tablet Screen*/
+@media (max-width: 768px) {
+  #login__container {
+      width: "100%";
+  }
+
+  #register_container {
+    width: "100%";
+  }
+
+  #new_user__container {
+    width: "80%";
+  }
+
+}
+
+/* Default Size for Mobile Screens */
+@media (max-width: 480px) {
+  #login__container {
+      width: "100%";
+  }
+
+  #register_container {
+    width: "100%";
+  }
+
+  #new_user__container {
+    width: "80%";
+  }
+}

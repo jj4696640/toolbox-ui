@@ -46,8 +46,7 @@ function Login() {
 
   return (
     <div
-      className="shadow-lg p-3 mb-5 bg-body rounded align-self-center"
-      style={{ width: "35%" }}
+      className="shadow-lg p-3 mb-5 bg-body rounded align-self-center" id="login__container"
     >
       <p className="h3 text-center fw-bold">Sign In</p>
       <p className="small text-center">Sign in with your email and password.</p>

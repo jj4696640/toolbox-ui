@@ -908,8 +908,7 @@ function Register() {
 
   return (
     <div
-      className="shadow-lg p-3 mb-5 bg-body rounded align-self-center"
-      style={{ width: "50%" }}
+      className="shadow-lg p-3 mb-lg-5 bg-body rounded align-self-center" id="register_container"
     >
       <p className="h3 text-center fw-bold">Register</p>
       <p className="small text-center">
@@ -935,7 +934,7 @@ function Register() {
       {/* End: Alert for errors */}
       <form onSubmit={handleSubmit}>
         <div className="row mb-3">
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="firstName" className="form-label">
               First Name <span className="text-danger">*</span>
@@ -951,7 +950,7 @@ function Register() {
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="surname" className="form-label">
               Second Name <span className="text-danger">*</span>
@@ -967,7 +966,7 @@ function Register() {
               onChange={(e) => setSurname(e.target.value)}
             />
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="otherName" className="form-label">
               Other Name
@@ -984,7 +983,7 @@ function Register() {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col">
+          <div className="col-sm-12 col-md-6 col-lg-6">
             {" "}
             <label htmlFor="email" className="form-label">
               Email <span className="text-danger">*</span>
@@ -1000,7 +999,7 @@ function Register() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-6 col-lg-6">
             {" "}
             <label htmlFor="telephone" className="form-label">
               Telephone <span className="text-danger">*</span>
@@ -1017,8 +1016,8 @@ function Register() {
             />
           </div>
         </div>
-        <div className="row mb-3">
-          <div className="col">
+        <div className="row mb-3 ">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="forceNumber" className="form-label">
               Force Number <span className="text-danger">*</span>
@@ -1034,7 +1033,7 @@ function Register() {
               onChange={(e) => setForceNumber(e.target.value)}
             />
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="region" className="form-label">
               Region <span className="text-danger">*</span>
@@ -1053,7 +1052,7 @@ function Register() {
               ))}
             </select>
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="Station" className="form-label">
               Station <span className="text-danger">*</span>
@@ -1074,7 +1073,7 @@ function Register() {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="rank" className="form-label">
               Rank <span className="text-danger">*</span>
@@ -1093,7 +1092,7 @@ function Register() {
               ))}
             </select>
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="directorate" className="form-label">
               Directorate <span className="text-danger">*</span>
@@ -1112,7 +1111,7 @@ function Register() {
               ))}
             </select>
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-4 col-lg-4">
             {" "}
             <label htmlFor="officeRole" className="form-label">
               OfficeRole <span className="text-danger">*</span>
@@ -1129,7 +1128,7 @@ function Register() {
           </div>
         </div>
         <div className="row mb-3">
-          <div className="col">
+          <div className="col-sm-12 col-md-6 col-lg-6">
             {" "}
             <label htmlFor="password" className="form-label">
               Password <span className="text-danger">*</span>
@@ -1152,7 +1151,7 @@ function Register() {
               </p>
             )}
           </div>
-          <div className="col">
+          <div className="col-sm-12 col-md-6 col-lg-6">
             {" "}
             <label htmlFor="confirmPassword" className="form-label">
               Confirm password <span className="text-danger">*</span>

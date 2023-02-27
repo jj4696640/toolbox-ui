@@ -1264,7 +1264,25 @@ function CreateNew() {
     reader.readAsDataURL(file);
   };
 
+  const [required, setRequired] = useState(false);
+  const [requiredField, setRequiredField] = useState(null);
 
+  const closeAlert = () => {
+    setRequired(false);
+  };
+
+  // function to take underscored string and return title case
+  const titleCase = (str) => {
+    return str
+      .toLowerCase()
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -1305,14 +1323,82 @@ function CreateNew() {
       hind: hindImage,
     };
 
-    instance
-      .post("/suspects", data)
-      .then((res) => {
-        navigate("/suspects");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    for (const key in data) {
+      const element = data[key];
+      if (element === "") {
+        setRequired(true);
+        setRequiredField(titleCase(key));
+        return;
+      }
+    }
+
+    if (!required) {
+      instance
+        .post("/suspects", data)
+        .then((res) => {
+          // Reset form
+          setCaseRef("");
+          setStation("");
+          setOffence("");
+          setBriefsOnCase("");
+          setName("");
+          setSex("");
+          setAge("");
+          setNationality("");
+          setNin("");
+          setOtherIDNo("");
+          setTribe("");
+          setReligion("");
+          setMaritalStatus("");
+          setPlaceOfBirth("");
+          setPlaceOfResidence("");
+          setDistinguishingFeatures("");
+          setHeight("");
+          setBodyBuild("");
+          setEyeColor("");
+          setHairColor("");
+          setLevelOfEducation("");
+          setLanguage("");
+          setTravelHistory("");
+          setCriminalHistory("");
+          setOccupation("");
+          setTelephone([]);
+          setAssociates([
+            {
+              name: "",
+              residence: "",
+              telephone_numbers: [],
+            },
+          ]);
+          setParents([
+            {
+              name: "", 
+              residence: "",
+              telephone_numbers: [],
+            },
+          ]);
+          setSpouses([
+            {
+              name: "",
+              residence: "",
+              telephone_numbers: [],
+            },
+          ]);
+          setFrontImage("");
+          setLeftImage("");
+          setRightImage("");
+          setHindImage("");
+          setFront("url('https://randomuser.me/api/portraits/lego/6.jpg')");
+          setLeft("url('https://randomuser.me/api/portraits/lego/7.jpg')");
+          setRight("url('https://randomuser.me/api/portraits/lego/8.jpg')");
+          setHind("url('https://randomuser.me/api/portraits/lego/9.jpg')");
+          setSuccess(true);
+        })
+        .catch((err) => {
+          setError(true);
+          setErrorMessage(err.response.data.message);
+        });
+    }
   };
 
   return (
@@ -1329,10 +1415,57 @@ function CreateNew() {
         </div>
       </div>
       <form onSubmit={handleSubmit}>
+        {required && (
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            <strong>{requiredField}</strong> is required
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+              onClick={closeAlert}
+            ></button>
+          </div>
+        )}
+        {success && (
+          <div
+            className="alert alert-success alert-dismissible fade show"
+            role="alert"
+          >
+            <strong>Success!</strong> Suspect profile created successfully
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+              onClick={() => {
+                setSuccess(false);
+              }}
+            ></button>
+          </div>
+        )}
+        {error && (
+          <div
+            className="alert alert-danger alert-dismissible fade show"
+            role="alert"
+          >
+            <strong>Error!</strong> {errorMessage}
+            <button
+              type="button"
+              className="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+              onClick={() => setError(false)}
+            ></button>
+          </div>
+        )}
         {step1 && (
           <div className="row">
             <h2 className="h4">Step 1: Suspect Bio Information</h2>
-            <div className="col-3">
+            <div className="col-sm-12 col-md-6 col-lg-3 my-1">
               <div
                 style={{
                   width: "200px",
@@ -1354,7 +1487,7 @@ function CreateNew() {
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-12 col-md-6 col-lg-3 my-1">
               <div
                 style={{
                   width: "200px",
@@ -1376,7 +1509,7 @@ function CreateNew() {
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-12 col-md-6 col-lg-3 my-1">
               <div
                 style={{
                   width: "200px",
@@ -1398,7 +1531,7 @@ function CreateNew() {
                 />
               </div>
             </div>
-            <div className="col-3">
+            <div className="col-sm-12 col-md-6 col-lg-3 my-1">
               <div
                 style={{
                   width: "200px",
@@ -1420,7 +1553,7 @@ function CreateNew() {
                 />
               </div>
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="Name" className="form-label">
                 Name
               </label>
@@ -1432,7 +1565,7 @@ function CreateNew() {
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="caseRef" className="form-label">
                 Case Ref
               </label>
@@ -1444,7 +1577,7 @@ function CreateNew() {
                 onChange={(e) => setCaseRef(e.target.value)}
               />
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="height" className="form-label">
                 Station
               </label>
@@ -1486,7 +1619,7 @@ function CreateNew() {
                 onChange={(e) => setBriefsOnCase(e.target.value)}
               ></textarea>
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="sex" className="form-label">
                 Sex
               </label>
@@ -1506,19 +1639,20 @@ function CreateNew() {
                 })}
               </select>
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="age" className="form-label">
                 Age
               </label>
               <input
-                type="text"
+                type="number"
+                min={0}
                 className="form-control"
                 id="age"
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
             </div>
-            <div className="col-4">
+            <div className="col-sm-12 col-md-12 col-lg-4">
               <label htmlFor="nationality" className="form-label">
                 Nationality
               </label>
@@ -1538,7 +1672,7 @@ function CreateNew() {
                 })}
               </select>
             </div>
-            <div className="col-6">
+            <div className="col-sm-12 col-md-12 col-lg-6">
               <label htmlFor="placeOfBirth" className="form-label">
                 Place of Birth
               </label>
@@ -1550,11 +1684,8 @@ function CreateNew() {
                 onChange={(e) => setPlaceOfBirth(e.target.value)}
               />
             </div>
-            <div className="col-6">
-              <label
-                htmlFor="presentResidence"
-                className="form-label"
-              >
+            <div className="col-sm-12 col-md-12 col-lg-6">
+              <label htmlFor="presentResidence" className="form-label">
                 Present Residence
               </label>
               <input
@@ -1574,6 +1705,7 @@ function CreateNew() {
                 className="form-control"
                 placeholder="0772123123, 0770123123"
                 aria-label="0772123123"
+                value={telephone}
                 onChange={handleTelephoneChange}
               />
               <div className="text-muted small">
@@ -1581,7 +1713,7 @@ function CreateNew() {
               </div>
             </div>
 
-            <div className="col-6">
+            <div className="col-sm-12 col-md-12 col-lg-6">
               <label htmlFor="Name" className="form-label">
                 NIN
               </label>
@@ -1593,7 +1725,7 @@ function CreateNew() {
                 onChange={(e) => setNin(e.target.value)}
               />
             </div>
-            <div className="col-6">
+            <div className="col-sm-12 col-md-12 col-lg-6">
               <label htmlFor="caseRef" className="form-label">
                 Other ID no.
               </label>
@@ -1641,19 +1773,20 @@ function CreateNew() {
                   onChange={(e) => setDistinguishingFeatures(e.target.value)}
                 />
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="height" className="form-label">
                   Height (cm)
                 </label>
                 <input
-                  type="text"
+                  type="number"
+                  min={0}
                   className="form-control"
                   id="height"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
                 />
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="bodybuild" className="form-label">
                   Bodybuild
                 </label>
@@ -1665,7 +1798,7 @@ function CreateNew() {
                   onChange={(e) => setBodyBuild(e.target.value)}
                 />
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="height" className="form-label">
                   Religion
                 </label>
@@ -1683,7 +1816,7 @@ function CreateNew() {
                 </label>
                 <input type="text" className="form-control" id="bodybuild" />
               </div> */}
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="height" className="form-label">
                   Hair Color
                 </label>
@@ -1695,7 +1828,7 @@ function CreateNew() {
                   onChange={(e) => setHairColor(e.target.value)}
                 />
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="bodybuild" className="form-label">
                   Eye Color
                 </label>
@@ -1707,16 +1840,16 @@ function CreateNew() {
                   onChange={(e) => setEyeColor(e.target.value)}
                 />
               </div>
-              <div className="col-6">
-                <label
-                  htmlFor="height"
-                  className="form-label"
-                >
+              <div className="col-sm-12 col-md-12 col-lg-6">
+                <label htmlFor="height" className="form-label">
                   Level of Education
                 </label>
-                <select className="form-select" aria-label="" 
+                <select
+                  className="form-select"
+                  aria-label=""
                   value={levelOfEducation}
-                  onChange={(e) => setLevelOfEducation(e.target.value)}>
+                  onChange={(e) => setLevelOfEducation(e.target.value)}
+                >
                   <option defaultValue>Level of Education</option>
                   {educationLevels.map((level) => (
                     <option key={level.id} value={level.value}>
@@ -1725,7 +1858,7 @@ function CreateNew() {
                   ))}
                 </select>
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="height" className="form-label">
                   Tribe
                 </label>
@@ -1743,7 +1876,7 @@ function CreateNew() {
                   ))}
                 </select>
               </div>
-              <div className="col-6">
+              <div className="col-sm-12 col-md-12 col-lg-6">
                 <label htmlFor="height" className="form-label">
                   Marital Status
                 </label>
@@ -1765,9 +1898,12 @@ function CreateNew() {
                 <label htmlFor="bodybuild" className="form-label">
                   Occupation
                 </label>
-                <input type="text" className="form-control" id="bodybuild" 
-                value={occupation}
-                onChange={(e) => setOccupation(e.target.value)}
+                <input
+                  type="text"
+                  className="form-control"
+                  id="bodybuild"
+                  value={occupation}
+                  onChange={(e) => setOccupation(e.target.value)}
                 />
               </div>
             </div>
@@ -1822,7 +1958,7 @@ function CreateNew() {
                     </div>
                   </div>
                 )}
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="parentName" className="form-label">
                     Relationship
                   </label>
@@ -1840,7 +1976,7 @@ function CreateNew() {
                     ))}
                   </select>
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="parentName" className="form-label">
                     Name
                   </label>
@@ -1852,7 +1988,7 @@ function CreateNew() {
                     onChange={(event) => handleNameChange(event, index)}
                   />
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="residence" className="form-label">
                     Residence
                   </label>
@@ -1864,7 +2000,7 @@ function CreateNew() {
                     onChange={(event) => handleResidenceChange(event, index)}
                   />
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="contact" className="form-label">
                     Contact
                   </label>
@@ -1911,7 +2047,7 @@ function CreateNew() {
                     </div>
                   </div>
                 )}
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="parentName" className="form-label">
                     Relationship
                   </label>
@@ -1931,7 +2067,7 @@ function CreateNew() {
                     ))}
                   </select>
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="parentName" className="form-label">
                     Name
                   </label>
@@ -1943,7 +2079,7 @@ function CreateNew() {
                     onChange={(event) => handleSpouseNameChange(event, index)}
                   />
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="residence" className="form-label">
                     Residence
                   </label>
@@ -1952,10 +2088,12 @@ function CreateNew() {
                     className="form-control"
                     id="residence"
                     value={spouse.residence}
-                    onChange={(event) => handleSpouseResidenceChange(event, index)}
+                    onChange={(event) =>
+                      handleSpouseResidenceChange(event, index)
+                    }
                   />
                 </div>
-                <div className="col-3">
+                <div className="col-sm-12 col-md-12 col-lg-3">
                   <label htmlFor="contact" className="form-label">
                     Contact
                   </label>
@@ -2003,7 +2141,7 @@ function CreateNew() {
                   </div>
                 )}
 
-                <div className="col-4">
+                <div className="col-sm-12 col-md-12 col-lg-4">
                   <label htmlFor="parentName" className="form-label">
                     Name
                   </label>
@@ -2017,7 +2155,7 @@ function CreateNew() {
                     }
                   />
                 </div>
-                <div className="col-4">
+                <div className="col-sm-12 col-md-12 col-lg-4">
                   <label htmlFor="residence" className="form-label">
                     Residence
                   </label>
@@ -2031,7 +2169,7 @@ function CreateNew() {
                     }
                   />
                 </div>
-                <div className="col-4">
+                <div className="col-sm-12 col-md-12 col-lg-4">
                   <label htmlFor="contact" className="form-label">
                     Contact
                   </label>
