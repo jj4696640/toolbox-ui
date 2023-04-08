@@ -39,6 +39,7 @@ function Login() {
         }
       })
       .catch((err) => {
+        console.log(err);
         setError(true);
         setMessage("Something went wrong. Please try again later.");
       });

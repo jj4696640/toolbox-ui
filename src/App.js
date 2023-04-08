@@ -11,6 +11,8 @@ import CreateNew from "./views/suspects/new";
 import Suspects from "./views/suspects/index";
 import NewUser from "./views/users/new-user";
 import Users from "./views/users/view";
+import Create from "./views/create/Create";
+import Suspect from "./views/suspects/view/Suspect";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/" element={<Dashboard />}/>
             <Route path="/suspects" element={<Suspects />}/>
             <Route path="/create-new" element={<CreateNew />}/>
+            <Route path="/suspects/:id" element={<Suspect />}/>
+            <Route path="/add-new" element={<Create />}/>
             <Route path="/users" element={<Users />}/>
           </Route>
         </Routes>

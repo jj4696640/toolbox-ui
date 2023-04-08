@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import instance from "../../../axios";
+import Loader from "../../../components/Loader";
 
 const gender = [
   {
@@ -942,6 +943,7 @@ function CreateNew() {
   const [step3, setStep3] = useState(false);
   const [step4, setStep4] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNext = () => {
     switch (currentStep) {
@@ -1286,6 +1288,7 @@ function CreateNew() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
 
     const data = {
       case_ref: caseRef,
@@ -1323,16 +1326,7 @@ function CreateNew() {
       hind: hindImage,
     };
 
-    for (const key in data) {
-      const element = data[key];
-      if (element === "") {
-        setRequired(true);
-        setRequiredField(titleCase(key));
-        return;
-      }
-    }
-
-    if (!required) {
+    // if (!required) {
       instance
         .post("/suspects", data)
         .then((res) => {
@@ -1372,7 +1366,7 @@ function CreateNew() {
           ]);
           setParents([
             {
-              name: "", 
+              name: "",
               residence: "",
               telephone_numbers: [],
             },
@@ -1393,12 +1387,16 @@ function CreateNew() {
           setRight("url('https://randomuser.me/api/portraits/lego/8.jpg')");
           setHind("url('https://randomuser.me/api/portraits/lego/9.jpg')");
           setSuccess(true);
+          setIsSubmitting(false);
+          navigate("/suspects");
         })
         .catch((err) => {
+          console.log(err)
+          setIsSubmitting(false);
           setError(true);
-          setErrorMessage(err.response.data.message);
+          setErrorMessage("An error occurred. Please try again later");
         });
-    }
+    // }
   };
 
   return (
@@ -2258,9 +2256,16 @@ function CreateNew() {
                 Next
               </button>
               {currentStep === 4 && (
-                <button type="submit" className="btn btn-primary mx-2">
+                <div className="d-flex justify-content-center ">
+                  <button type="submit" className="btn btn-primary mx-2" disabled={isSubmitting}>
                   submit
                 </button>
+                {
+                  isSubmitting && (
+                <Loader />
+                  )
+                }
+                </div>
               )}
             </div>
           </div>
